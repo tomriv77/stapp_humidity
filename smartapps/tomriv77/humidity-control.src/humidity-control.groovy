@@ -20,8 +20,8 @@ definition(
     author: "tomriv77",
     description: "Turn on/off humidifier or dehumidifier based on current humidity detected by external sensor.",
     category: "Safety & Security",
-    iconUrl: "https://s3.amazonaws.com/smartapp-icons/Meta/water_moisture.png",
-    iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Meta/water_moisture@2x.png"
+    iconUrl: "https://raw.githubusercontent.com/tomriv77/stapp_humidity/master/humidity_icon%401X.jpeg",
+    iconX2Url: "https://raw.githubusercontent.com/tomriv77/stapp_humidity/master/humidity_icon%402X.jpeg"
 )
 
 preferences {
@@ -51,13 +51,14 @@ def installed() {
 def updated() {
 	unsubscribe()
 	subscribe(humiditySensor, "humidity", deviceControl)
+    deviceControl(null)
 }
 
 def deviceControl(evt) {
 	def highPointValue = highPoint as int
     def lowPointValue = lowPoint as int
     def switchValue = deviceSwitch.currentSwitch
-    def currentHumidityValue = humiditySensor.currentState("humidity").value.toInteger()
+    def currentHumidityValue = Math.round(Float.parseFloat(humiditySensor.currentState("humidity").value)) as int
     
 	log.debug "Current humidity is ${currentHumidityValue}, switch is ${switchValue}"
     log.debug "Device type is ${deviceType}, highPoint: ${highPointValue}, lowPoint: ${lowPointValue}"
